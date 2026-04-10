@@ -1,4 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
   <rect width="32" height="32" fill="#000000"/>
-  <text x="16" y="22" font-family="serif" font-size="18" fill="#ffffff" text-anchor="middle" font-weight="bold">ХӀ</text>
+  <!-- Пламя -->
+  <path d="M16 4 C16 4, 22 10, 22 16 C22 20, 19.5 22, 18 21 C20 18, 18 14, 16 12 C16 12, 17 17, 14 19 C12.5 20, 10 18.5, 10 16 C10 11, 16 4, 16 4 Z" 
+    fill="#ffffff" opacity="0.85"/>
+  <!-- Внутренний блик -->
+  <path d="M16 10 C16 10, 19 14, 18.5 17 C18 19, 16.5 20, 15.5 19.5 C17 17.5, 16.5 14, 15 12 Z" 
+    fill="#000000" opacity="0.3"/>
+  <!-- Фитиль -->
+  <line x1="16" y1="24" x2="16" y2="28" stroke="#ffffff" stroke-width="1" opacity="0.35"/>
 </svg>
