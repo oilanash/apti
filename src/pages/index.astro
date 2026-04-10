@@ -75,11 +75,18 @@ const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', '
     
     .poem-text {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 1.5rem;
-      line-height: 2;
+      font-size: 1.1rem;
+      line-height: 1.8;
       color: #cccccc;
       font-weight: 400;
       white-space: pre-line;
+    }
+
+    @media (min-width: 768px) {
+      .poem-text {
+        font-size: 1.6rem;
+        line-height: 2.2;
+      }
     }
 
     .poem-text p {
