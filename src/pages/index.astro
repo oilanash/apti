@@ -1,0 +1,378 @@
+---
+import fs from 'fs';
+import { Picture } from 'astro:assets';
+import authorImg from '../assets/image.webp';
+import towerImg from '../assets/tower.webp';
+
+const poemTextRaw = fs.readFileSync(new URL('../../поэма_clean.txt', import.meta.url), 'utf-8');
+const sections = poemTextRaw.split('***').map(s => s.trim()).filter(s => s.length > 5);
+const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
+---
+<html lang="ce" class="antialiased bg-black text-[#e0e0e0] scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Хьайбахахь язйина байташ | БИСУЛТАНОВ АПТИ</title>
+  
+  <!-- SEO & Social Meta Tags -->
+  <meta name="description" content="Цифровой памятник чеченской поэме Апти Бисултанова «Хьайбахахь язйина байташ». Трагедия Хайбаха 1944 года в нохчийн поэзи." />
+  <meta name="keywords" content="Апти Бисултанов, Хьайбахахь язйина байташ, Хайбах, чеченская поэзия, депортация 1944, нохчийн поэзи, стихи про Хайбах, чеченская литература" />
+  <meta name="author" content="Апти Бисултанов" />
+  <meta name="robots" content="index, follow" />
+  
+  <!-- Open Graph / ВКонтакте / Telegram / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Хьайбахахь язйина байташ | Апти Бисултанов" />
+  <meta property="og:description" content="Цифровой памятник поэме о трагедии в Хайбахе. Читать онлайн." />
+  <meta property="og:image" content="/og-preview.png" />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:title" content="Хьайбахахь язйина байташ | Апти Бисултанов" />
+  <meta property="twitter:description" content="Цифровой памятник поэме о трагедии в Хайбахе." />
+  <meta property="twitter:image" content="/og-preview.png" />
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+  <!-- Защита от скачивания и оффлайн просмотра (Обфусцировано) -->
+  <script is:inline>
+    eval(atob('KGZ1bmN0aW9uKCl7aWYod2luZG93LmxvY2F0aW9uLnByb3RvY29sPT09ImZpbGU6Iil7ZG9jdW1lbnQuZG9jdW1lbnRFbGVtZW50LmlubmVySFRNTD0iIjt9ZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcigiY29udGV4dG1lbnUiLGZ1bmN0aW9uKGUpe2UucHJldmVudERlZmF1bHQoKTt9KTtkb2N1bWVudC5hZGRFdmVudExpc3RlbmVyKCJrZXlkb3duIixmdW5jdGlvbihlKXtpZihlLmN0cmxLZXl8fGUubWV0YUtleSl7aWYoZScua2V5J3x8ZVsna2V5Q29kZSddPT09ODN8fGVbJ2tleUNvZGUnXT09PTg1fHxlWydrZXlDb2RlJ109PT02N3x8ZVsna2V5Q29kZSddPT09ODApe2UucHJldmVudERlZmF1bHQoKTt9fWlmKGVbJ2tleUNvZGUnXT09PTEyMyl7ZS5wcmV2ZW50RGVmYXVsdCgpO319KTt9KSgpOw=='));
+  </script>
+  
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400&display=swap');
+    
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #000000;
+      overflow-x: hidden;
+    }
+    
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      line-height: 1.1;
+      margin: 0;
+    }
+
+    .hero-subtitle {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      letter-spacing: 0.1em;
+    }
+
+    /* Изображение плавно перетекающее в черный фон с помощью радиального градиента */
+    .fade-edges {
+      -webkit-mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 70%);
+      mask-image: radial-gradient(ellipse at center, rgba(0,0,0,1) 20%, rgba(0,0,0,0) 70%);
+      object-fit: cover;
+    }
+
+    .char {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    
+    .poem-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      line-height: 2;
+      color: #cccccc;
+      font-weight: 400;
+      white-space: pre-line;
+    }
+
+    .poem-text p {
+      margin-bottom: 2rem;
+    }
+
+    /* Эффект фонарика на тексте */
+    .stanza-block {
+      transition: opacity 1s cubic-bezier(0.2, 0.8, 0.2, 1), filter 1s cubic-bezier(0.2, 0.8, 0.2, 1), transform 1s cubic-bezier(0.2, 0.8, 0.2, 1);
+      opacity: 0.05;
+      filter: blur(8px);
+      transform: translateY(30px);
+    }
+    .stanza-block.is-focused {
+      opacity: 1;
+      filter: blur(0px);
+      transform: translateY(0);
+    }
+
+    /* Курсор-свеча */
+    .candle-light {
+      position: fixed;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 35;
+      opacity: 0;
+      background: radial-gradient(
+        circle,
+        rgba(255, 180, 80, 0.08) 0%,
+        rgba(255, 150, 50, 0.04) 30%,
+        rgba(255, 120, 20, 0.01) 60%,
+        transparent 100%
+      );
+      transform: translate(-50%, -50%);
+      transition: opacity 1.5s ease;
+      mix-blend-mode: screen;
+    }
+    .candle-light.is-active {
+      opacity: 1;
+    }
+  </style>
+
+  <script src="https://unpkg.com/split-type"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" is:inline></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" is:inline></script>
+</head>
+<body class="selection:bg-white selection:text-black">
+
+  <!-- Курсор-свеча -->
+  <div class="candle-light" id="candle"></div>
+
+  <!-- Призрачный автор на фоне (всегда sticky, смещен вниз чтобы не касаться меню) -->
+  <div class="author-ghost fixed inset-0 z-0 flex items-center justify-center pointer-events-none -translate-x-8 md:-translate-x-16 translate-y-12 md:translate-y-20">
+    <Picture src={authorImg} formats={['avif', 'webp']} alt="Апти Бисултанов" class="w-full max-w-3xl h-auto object-center opacity-0 fade-edges mx-auto" draggable="false" />
+  </div>
+
+  <!-- Верхняя тень (заставляет текст растворяться при скролле вверх, спасая меню) -->
+  <div class="fixed top-0 left-0 w-full h-32 md:h-48 bg-gradient-to-b from-black via-black/80 to-transparent z-40 pointer-events-none"></div>
+
+  <!-- Minimalist Chapter Navigation (возвращено наверх) -->
+  <nav class="fixed top-6 md:top-10 w-full z-50 flex justify-center items-center gap-8 md:gap-14 px-6">
+    {sections.map((_, idx) => (
+      <a href={`#part-${idx + 1}`} class="nav-item opacity-0 translate-y-[-15px] text-[10px] md:text-xs font-[Montserrat] tracking-[0.4em] text-white/40 hover:text-white transition-all duration-500 hover:scale-[1.2]">
+        {romanNumerals[idx]}
+      </a>
+    ))}
+  </nav>
+
+  <!-- Neo-Classical Hero Section (Только текст) -->
+  <header class="relative w-full h-[110vh] overflow-hidden flex flex-col items-center justify-center bg-transparent">
+    
+    <!-- Текст (смещен сильно вниз на туловище) -->
+    <div class="relative z-20 w-full flex flex-col justify-center items-center text-center mix-blend-screen pointer-events-none px-4 mt-32 md:mt-56 lg:mt-64">
+      <h2 class="hero-title fg-title text-3xl md:text-4xl lg:text-5xl text-white whitespace-nowrap tracking-wider">
+        АПТИ БИСУЛТАНОВ
+      </h2>
+      
+      <!-- Подняли ближе к автору (уменьшили mt) -->
+      <div class="flex flex-col items-center gap-8 md:gap-12 mt-4 md:mt-6">
+        <!-- Увеличили текст на ~20% (text-xl -> 3xl -> 4xl) -->
+        <h3 class="hero-subtitle fg-title text-xl md:text-3xl lg:text-4xl text-white/70 uppercase tracking-[0.3em] leading-[1.8]">
+          Хьайбахахь<br/>
+          язйина<br/>
+          байташ<br/>
+          <span class="text-[10px] md:text-xs text-white/25 tracking-[0.3em] font-[Cormorant] italic lowercase not-italic" style="font-variant: normal; text-transform: none;">(гуо я поэма)</span>
+        </h3>
+
+        <!-- Координаты Хьайбаха -->
+        <div class="hero-coords opacity-0 translate-y-4 text-[10px] md:text-xs text-white/30 tracking-[0.4em] font-[Montserrat]">
+          42° 52' 19" N, 45° 14' 33" E
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div class="absolute bottom-32 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-4 opacity-40 scroll-hint">
+      <div class="w-[1px] h-20 bg-gradient-to-b from-white/0 to-white/70"></div>
+    </div>
+  </header>
+
+  <!-- Poem Content -->
+  <main class="max-w-3xl mx-auto px-6 pt-32 pb-0 relative z-30 bg-transparent">
+    {sections.map((sec, idx) => {
+      const stanzas = sec.split(/\u2028\u2028|\n\n|\r\n\r\n/).map(st => st.trim()).filter(st => st);
+      
+      return (
+        <div id={`part-${idx + 1}`} class={`flex flex-col gap-10 stanza-block relative items-center text-center scroll-mt-32 ${idx < sections.length - 1 ? 'mb-40' : 'mb-0'}`}>
+          <div class="text-xl md:text-2xl font-bold font-[Montserrat] text-white tracking-[0.4em] uppercase">
+            — {idx + 1} — 
+          </div>
+          
+          <div class="w-full poem-text">
+            {stanzas.map((stanza, sIdx) => {
+              // Если это первая 'строфа' в секции и содержит всего 1-2 строки — это подзаголовок
+              const isTitle = sIdx === 0 && stanza.split('\n').length <= 2;
+              
+              return (
+                <p class={isTitle ? "font-bold text-white text-2xl md:text-3xl mb-16 tracking-widest uppercase" : ""}>
+                  {stanza}
+                </p>
+              )
+            })}
+          </div>
+        </div>
+      )
+    })}
+  </main>
+
+  <!-- Башня — подвал сайта -->
+  <footer class="relative w-full overflow-hidden">
+    <!-- Башня по центру (совпадает с колонкой текста) -->
+    <div class="max-w-3xl mx-auto flex justify-center px-6">
+      <Picture src={towerImg} formats={['avif', 'webp']} alt="Башня" class="w-full h-auto object-contain fade-edges" draggable="false" />
+    </div>
+    <!-- Текст поверх башни -->
+    <div class="absolute inset-0 flex flex-col items-center justify-end pb-10 md:pb-16 z-10 text-center">
+      <p class="text-[10px] md:text-xs text-white/30 tracking-[0.4em] font-[Montserrat] uppercase mb-3">42° 52' 19" N, 45° 14' 33" E</p>
+      <p class="text-sm md:text-base text-white/20 font-[Cormorant] italic leading-relaxed mb-6">A digital monument to the poem by Apti Bisultanov</p>
+      <p class="text-xs md:text-sm text-white/15 tracking-[0.5em] font-[Montserrat]">1447/2026</p>
+    </div>
+  </footer>
+
+  <script is:inline>
+    // Ждем загрузки DOM
+    window.addEventListener('DOMContentLoaded', () => {
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Разбиваем буквы для анимации
+      const fgTitles = new SplitType('.fg-title', { types: 'chars' });
+
+      const tl = gsap.timeline();
+
+      // 1. Магическое появление портрета из сильного блюра
+      gsap.fromTo('.author-ghost img', 
+        { opacity: 0, filter: "blur(20px)", scale: 1.05 },
+        { opacity: 0.80, filter: "blur(0px)", scale: 1, duration: 4, ease: 'power2.out' }
+      );
+
+      // Растворение портрета ПРИ СКРОЛЛЕ
+      gsap.fromTo('.author-ghost', 
+        { opacity: 1 },
+        {
+          opacity: 0,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: "body",
+            start: "100px top",
+            end: "+=3500",
+            scrub: 1.5          
+          }
+        }
+      );
+
+      gsap.to('.author-ghost img', {
+        scale: 1.15,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: "body",
+          start: "top top",
+          end: "+=3500",
+          scrub: 1.5
+        }
+      });
+
+      // 2. Кинематографичный вылет букв (с размытием, 3D-поворотом и волной)
+      tl.fromTo(fgTitles.chars, 
+        { opacity: 0, y: 80, filter: "blur(12px)", rotationX: -30 },
+        {
+          opacity: 1,
+          y: 0,
+          filter: "blur(0px)",
+          rotationX: 0,
+          stagger: 0.04,
+          duration: 2.5,
+          ease: 'expo.out'
+        }, 
+        1.0 // Начинается, когда портрет чуть проявился
+      );
+
+      // 3. Меню появляется почти сразу (параллельно с портретом)
+      tl.fromTo('.nav-item', 
+        { y: -20, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          stagger: 0.08,
+          duration: 1,
+          ease: 'power2.out'
+        }, 
+        0.3 // Почти мгновенно, через 0.3 секунды
+      );
+
+      // 4. Физическое проявление координат
+      tl.fromTo('.hero-coords', 
+        { opacity: 0, letterSpacing: "1.2em", filter: "blur(8px)" },
+        {
+          opacity: 1,
+          letterSpacing: "0.4em", // Сдвигается до нормального
+          filter: "blur(0px)",
+          duration: 3,
+          ease: 'power2.out'
+        }, 
+        "-=1.0"
+      );
+
+      // Скролл-анимации для эффекта 'Фонарик в темноте'
+      document.querySelectorAll('.stanza-block').forEach((block) => {
+        ScrollTrigger.create({
+          trigger: block,
+          start: "top 75%", // Срабатывает, когда строфа появляется снизу (75% высоты экрана)
+          end: "bottom 35%", // Выключается, когда уходит наверх (35% от верха)
+          toggleClass: "is-focused",
+        });
+      });
+
+      // ========== КУРСОР-СВЕЧА ==========
+      const candle = document.getElementById('candle');
+      let candleX = window.innerWidth / 2;
+      let candleY = window.innerHeight / 2;
+      let targetX = candleX;
+      let targetY = candleY;
+
+      // Десктоп: следим за мышкой
+      document.addEventListener('mousemove', (e) => {
+        targetX = e.clientX;
+        targetY = e.clientY;
+        candle.classList.add('is-active');
+      });
+
+      // Мобильные: следим за касанием
+      document.addEventListener('touchmove', (e) => {
+        const touch = e.touches[0];
+        targetX = touch.clientX;
+        targetY = touch.clientY;
+        candle.classList.add('is-active');
+      }, { passive: true });
+
+      // На мобильных: свечение в центре экрана при скролле
+      let mobileScrollTimer;
+      window.addEventListener('scroll', () => {
+        if ('ontouchstart' in window) {
+          targetX = window.innerWidth / 2;
+          targetY = window.innerHeight / 2;
+          candle.classList.add('is-active');
+          clearTimeout(mobileScrollTimer);
+          mobileScrollTimer = setTimeout(() => {
+            candle.classList.remove('is-active');
+          }, 2000);
+        }
+      }, { passive: true });
+
+      // Плавная анимация движения свечи (инерция)
+      function animateCandle() {
+        candleX += (targetX - candleX) * 0.08;
+        candleY += (targetY - candleY) * 0.08;
+        candle.style.left = candleX + 'px';
+        candle.style.top = candleY + 'px';
+        requestAnimationFrame(animateCandle);
+      }
+      animateCandle();
+
+      // Свеча гаснет, если мышь не двигается 3 секунды
+      let mouseTimer;
+      document.addEventListener('mousemove', () => {
+        clearTimeout(mouseTimer);
+        mouseTimer = setTimeout(() => {
+          candle.classList.remove('is-active');
+        }, 3000);
+      });
+
+    });
+  </script>
+</body>
+</html>

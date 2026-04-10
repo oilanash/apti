@@ -1,0 +1,16 @@
+# build output
+dist/
+node_modules/
+
+# OS files
+.DS_Store
+
+# ENV variables
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# Astro cache
+.astro/
