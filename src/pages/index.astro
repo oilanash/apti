@@ -131,9 +131,6 @@ const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', '
     }
   </style>
 
-  <script src="https://unpkg.com/split-type"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" is:inline></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" is:inline></script>
 </head>
 <body class="selection:bg-white selection:text-black">
 
@@ -231,7 +228,11 @@ const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', '
     </div>
   </footer>
 
-  <script is:inline>
+  <script>
+    import { gsap } from 'gsap';
+    import { ScrollTrigger } from 'gsap/ScrollTrigger';
+    import SplitType from 'split-type';
+
     // Ждем загрузки DOM
     window.addEventListener('DOMContentLoaded', () => {
       gsap.registerPlugin(ScrollTrigger);
